@@ -1,0 +1,83 @@
+----------------------------------- < GAN > ------------------------------------
+------------------------------------ GAN/G -------------------------------------
+Input - shared                                    (32, 32)
+Input - private                                   (32, 32, 8)
+Input - temporal_shared                           (32, 32)
+Input - temporal_private                          (32, 32, 8)
+--------------------------------------------------------------------------------
+[GAN/G/temporal_shared]
+Input                                             (32, 32)
+GAN/G/temporal_shared/Layer_0        dense        (32, 768)                     
+GAN/G/temporal_shared/Layer_1        reshape      (32, 3, 1, 1, 256)            
+GAN/G/temporal_shared/Layer_2        transconv3d  (32, 4, 1, 1, 32)             
+GAN/G/temporal_shared/Layer_3        reshape      (32, 4, 32)                   
+--------------------------------------------------------------------------------
+[GAN/G/temporal_private_0]
+Input                                             (32, 32)
+GAN/G/temporal_private_0/Layer_0     dense        (32, 768)                     
+GAN/G/temporal_private_0/Layer_1     reshape      (32, 3, 1, 1, 256)            
+GAN/G/temporal_private_0/Layer_2     transconv3d  (32, 4, 1, 1, 32)             
+GAN/G/temporal_private_0/Layer_3     reshape      (32, 4, 32)                   
+--------------------------------------------------------------------------------
+[GAN/G/bar_main_0]
+Input                                             (32, 4, 128)
+GAN/G/bar_main_0/Layer_0             reshape      (32, 4, 1, 1, 128)            
+GAN/G/bar_main_0/Layer_1             transconv3d  (32, 4, 4, 1, 512)            
+GAN/G/bar_main_0/Layer_2             transconv3d  (32, 4, 4, 3, 256)            
+GAN/G/bar_main_0/Layer_3             transconv3d  (32, 4, 16, 3, 128)           
+GAN/G/bar_main_0/Layer_4             transconv3d  (32, 4, 16, 7, 64)            
+--------------------------------------------------------------------------------
+[GAN/G/bar_pitch_time_0]
+Input                                             (32, 4, 16, 7, 64)
+GAN/G/bar_pitch_time_0/Layer_0       transconv3d  (32, 4, 16, 84, 32)           
+GAN/G/bar_pitch_time_0/Layer_1       transconv3d  (32, 4, 96, 84, 16)           
+--------------------------------------------------------------------------------
+[GAN/G/bar_time_pitch_0]
+Input                                             (32, 4, 16, 7, 64)
+GAN/G/bar_time_pitch_0/Layer_0       transconv3d  (32, 4, 96, 7, 32)            
+GAN/G/bar_time_pitch_0/Layer_1       transconv3d  (32, 4, 96, 84, 16)           
+--------------------------------------------------------------------------------
+[GAN/G/bar_merged_0]
+Input                                             (32, 4, 96, 84, 32)
+GAN/G/bar_merged_0/Layer_0           transconv3d  (32, 4, 96, 84, 1)            
+--------------------------------------------------------------------------------
+------------------------------------ GAN/D -------------------------------------
+Input                                             (32, 4, 96, 84, 8)
+--------------------------------------------------------------------------------
+[GAN/D/pt_0]
+Input                                             (32, 4, 96, 84, 1)
+GAN/D/pt_0/Layer_0                   conv3d       (32, 4, 96, 7, 32)            
+GAN/D/pt_0/Layer_1                   conv3d       (32, 4, 16, 7, 64)            
+--------------------------------------------------------------------------------
+[GAN/D/tp_0]
+Input                                             (32, 4, 96, 84, 1)
+GAN/D/tp_0/Layer_0                   conv3d       (32, 4, 16, 84, 32)           
+GAN/D/tp_0/Layer_1                   conv3d       (32, 4, 16, 7, 64)            
+--------------------------------------------------------------------------------
+[GAN/D/merged_0]
+Input                                             (32, 4, 16, 7, 128)
+GAN/D/merged_0/Layer_0               conv3d       (32, 4, 16, 7, 64)            
+--------------------------------------------------------------------------------
+[GAN/D/shared]
+Input                                             (32, 4, 16, 7, 512)
+GAN/D/shared/Layer_0                 conv3d       (32, 4, 4, 3, 128)            
+GAN/D/shared/Layer_1                 conv3d       (32, 4, 1, 1, 256)            
+--------------------------------------------------------------------------------
+[GAN/D/chroma]
+Input                                             (32, 4, 4, 12, 8)
+GAN/D/chroma/Layer_0                 conv3d       (32, 4, 4, 1, 64)             
+GAN/D/chroma/Layer_1                 conv3d       (32, 4, 1, 1, 128)            
+--------------------------------------------------------------------------------
+[GAN/D/onset]
+Input                                             (32, 4, 96, 84, 8)
+GAN/D/onset/Layer_0                  sum          (32, 4, 96, 1, 8)             
+GAN/D/onset/Layer_1                  conv3d       (32, 4, 16, 1, 32)            
+GAN/D/onset/Layer_2                  conv3d       (32, 4, 4, 1, 64)             
+GAN/D/onset/Layer_3                  conv3d       (32, 4, 1, 1, 128)            
+--------------------------------------------------------------------------------
+[GAN/D/merged]
+Input                                             (32, 4, 1, 1, 512)
+GAN/D/merged/Layer_0                 conv3d       (32, 3, 1, 1, 512)            
+GAN/D/merged/Layer_1                 reshape      (32, 1536)                    
+GAN/D/merged/Layer_2                 dense        (32, 1)                       
+--------------------------------------------------------------------------------
