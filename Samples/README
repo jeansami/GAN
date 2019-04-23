@@ -1,0 +1,9 @@
+To listen .mid file, you can use WMP on Windows or any MIDI player.
+12xxx-13xxx : Composer samples
+21xxx-22xxx : Jamming Samples
+The rest : Hybrid Samples
+
+You can compare it to the downsampled results on the official repository 
+of Musegan
+https://salu133445.github.io/musegan/results
+ 
